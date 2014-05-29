@@ -1,0 +1,276 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CST.Security.Data.Store" Alias="Self" Provider="Oracle.DataAccess.Client" ProviderManifestToken="10.2" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="CSTSecurityDataStoreContainer">
+          <EntitySet Name="FG_APP" EntityType="CST.Security.Data.Store.FG_APP" store:Type="Tables" Schema="SYSADM" />
+          <EntitySet Name="FG_GROUP" EntityType="CST.Security.Data.Store.FG_GROUP" store:Type="Tables" Schema="SYSADM" />
+          <EntitySet Name="FG_GROUP_USER" EntityType="CST.Security.Data.Store.FG_GROUP_USER" store:Type="Tables" Schema="SYSADM" />
+          <EntitySet Name="FG_USER" EntityType="CST.Security.Data.Store.FG_USER" store:Type="Tables" Schema="SYSADM" />
+          <AssociationSet Name="FK_FG_GRPUSR_GRP" Association="CST.Security.Data.Store.FK_FG_GRPUSR_GRP">
+            <End Role="FG_GROUP" EntitySet="FG_GROUP" />
+            <End Role="FG_GROUP_USER" EntitySet="FG_GROUP_USER" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FG_GRPUSR_USR" Association="CST.Security.Data.Store.FK_FG_GRPUSR_USR">
+            <End Role="FG_USER" EntitySet="FG_USER" />
+            <End Role="FG_GROUP_USER" EntitySet="FG_GROUP_USER" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GROUP_APP" Association="CST.Security.Data.Store.FK_GROUP_APP">
+            <End Role="FG_APP" EntitySet="FG_APP" />
+            <End Role="FG_GROUP" EntitySet="FG_GROUP" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="FG_APP">
+          <Key>
+            <PropertyRef Name="FG_APP_ID" />
+          </Key>
+          <Property Name="FG_APP_ID" Type="number" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="FG_APP_CODE" Type="varchar2" Nullable="false" MaxLength="30" />
+          <Property Name="FG_APP_NAME" Type="varchar2" Nullable="false" MaxLength="200" />
+          <Property Name="FG_ACTIVE_FLAG" Type="varchar2" Nullable="false" MaxLength="1" />
+          <Property Name="FG_SYS_ADMIN_FLAG" Type="varchar2" Nullable="false" MaxLength="1" />
+        </EntityType>
+        <EntityType Name="FG_GROUP">
+          <Key>
+            <PropertyRef Name="FG_GROUP_ID" />
+          </Key>
+          <Property Name="FG_GROUP_ID" Type="number" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="FG_GROUP_CODE" Type="varchar2" Nullable="false" MaxLength="30" />
+          <Property Name="FG_GROUP_NAME" Type="varchar2" Nullable="false" MaxLength="200" />
+          <Property Name="FG_APP_ID" Type="number" Nullable="false" />
+          <Property Name="FG_ACTIVE_FLAG" Type="varchar2" Nullable="false" MaxLength="1" />
+          <Property Name="FG_DESCRIPTION" Type="varchar2" MaxLength="200" />
+          <Property Name="FG_APP_ADMIN_FLAG" Type="varchar2" Nullable="false" MaxLength="2" />
+        </EntityType>
+        <EntityType Name="FG_GROUP_USER">
+          <Key>
+            <PropertyRef Name="FG_GROUP_ID" />
+            <PropertyRef Name="FG_USER_ID" />
+          </Key>
+          <Property Name="FG_GROUP_ID" Type="number" Nullable="false" />
+          <Property Name="FG_USER_ID" Type="number" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FG_USER">
+          <Key>
+            <PropertyRef Name="FG_USER_ID" />
+          </Key>
+          <Property Name="FG_USER_ID" Type="number" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="FG_USER_LOGIN" Type="varchar2" Nullable="false" MaxLength="15" />
+          <Property Name="FG_LAST_NAME" Type="varchar2" Nullable="false" MaxLength="50" />
+          <Property Name="FG_FIRST_NAME" Type="varchar2" Nullable="false" MaxLength="50" />
+          <Property Name="FG_PASSWORD" Type="varchar2" Nullable="false" MaxLength="40" />
+          <Property Name="FG_EMAIL" Type="varchar2" MaxLength="50" />
+          <Property Name="FG_PHONE" Type="varchar2" MaxLength="30" />
+          <Property Name="FG_ACTIVE_FLAG" Type="varchar2" Nullable="false" MaxLength="1" />
+          <Property Name="FG_ALTER_PASSWORD_FLAG" Type="varchar2" Nullable="false" MaxLength="1" />
+          <Property Name="FG_CULTURE" Type="varchar2" MaxLength="10" />
+        </EntityType>
+        <Association Name="FK_FG_GRPUSR_GRP">
+          <End Role="FG_GROUP" Type="CST.Security.Data.Store.FG_GROUP" Multiplicity="1" />
+          <End Role="FG_GROUP_USER" Type="CST.Security.Data.Store.FG_GROUP_USER" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FG_GROUP">
+              <PropertyRef Name="FG_GROUP_ID" />
+            </Principal>
+            <Dependent Role="FG_GROUP_USER">
+              <PropertyRef Name="FG_GROUP_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FG_GRPUSR_USR">
+          <End Role="FG_USER" Type="CST.Security.Data.Store.FG_USER" Multiplicity="1" />
+          <End Role="FG_GROUP_USER" Type="CST.Security.Data.Store.FG_GROUP_USER" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FG_USER">
+              <PropertyRef Name="FG_USER_ID" />
+            </Principal>
+            <Dependent Role="FG_GROUP_USER">
+              <PropertyRef Name="FG_USER_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GROUP_APP">
+          <End Role="FG_APP" Type="CST.Security.Data.Store.FG_APP" Multiplicity="1" />
+          <End Role="FG_GROUP" Type="CST.Security.Data.Store.FG_GROUP" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FG_APP">
+              <PropertyRef Name="FG_APP_ID" />
+            </Principal>
+            <Dependent Role="FG_GROUP">
+              <PropertyRef Name="FG_APP_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="FG_GET_DECRYPT_P" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="SYSADM">
+          <Parameter Name="V_CRYPT_TEXT" Type="varchar2" Mode="In" />
+          <Parameter Name="V_PLAIN_TEXT" Type="varchar2" Mode="Out" />
+        </Function>
+        <Function Name="FG_GET_ENCRYPT_P" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="SYSADM">
+          <Parameter Name="V_PLAIN_TEXT" Type="varchar2" Mode="In" />
+          <Parameter Name="V_CRYPT_TEXT" Type="varchar2" Mode="Out" />
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CST.Security.Data" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="SecurityEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Apps" EntityType="CST.Security.Data.App" />
+          <EntitySet Name="Groups" EntityType="CST.Security.Data.Group" />
+          <EntitySet Name="Users" EntityType="CST.Security.Data.User" />
+          <AssociationSet Name="FK_GROUP_APP" Association="CST.Security.Data.FK_GROUP_APP">
+            <End Role="FG_APP" EntitySet="Apps" />
+            <End Role="FG_GROUP" EntitySet="Groups" />
+          </AssociationSet>
+          <AssociationSet Name="FG_GROUP_USER" Association="CST.Security.Data.FG_GROUP_USER">
+            <End Role="FG_GROUP" EntitySet="Groups" />
+            <End Role="FG_USER" EntitySet="Users" />
+          </AssociationSet>
+          <FunctionImport Name="GetEncryptText">
+            <Parameter Name="V_PLAIN_TEXT" Mode="In" Type="String" />
+            <Parameter Name="V_CRYPT_TEXT" Mode="Out" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetDecryptText">
+            <Parameter Name="V_CRYPT_TEXT" Mode="In" Type="String" />
+            <Parameter Name="V_PLAIN_TEXT" Mode="Out" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="App">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Decimal" Nullable="false" Precision="38" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="30" Unicode="false" FixedLength="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="ActiveFlag" Type="String" Nullable="false" MaxLength="1" Unicode="false" FixedLength="false" />
+          <Property Name="SysAdminFlag" Type="String" Nullable="false" MaxLength="1" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Groups" Relationship="CST.Security.Data.FK_GROUP_APP" FromRole="FG_APP" ToRole="FG_GROUP" />
+        </EntityType>
+        <EntityType Name="Group">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Decimal" Nullable="false" Precision="38" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="30" Unicode="false" FixedLength="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="AppID" Type="Decimal" Nullable="false" Precision="38" Scale="0" />
+          <Property Name="ActiveFlag" Type="String" Nullable="false" MaxLength="1" Unicode="false" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="AppAdminFlag" Type="String" Nullable="false" MaxLength="2" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="App" Relationship="CST.Security.Data.FK_GROUP_APP" FromRole="FG_GROUP" ToRole="FG_APP" />
+          <NavigationProperty Name="Users" Relationship="CST.Security.Data.FG_GROUP_USER" FromRole="FG_GROUP" ToRole="FG_USER" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Decimal" Nullable="false" Precision="38" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Login" Type="String" Nullable="false" MaxLength="15" Unicode="false" FixedLength="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="40" Unicode="false" FixedLength="false" />
+          <Property Name="EMail" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Phone" Type="String" MaxLength="30" Unicode="false" FixedLength="false" />
+          <Property Name="ActiveFlag" Type="String" Nullable="false" MaxLength="1" Unicode="false" FixedLength="false" />
+          <Property Name="AlterPasswordFlag" Type="String" Nullable="false" MaxLength="1" Unicode="false" FixedLength="false" />
+          <Property Name="Culture" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Groups" Relationship="CST.Security.Data.FG_GROUP_USER" FromRole="FG_USER" ToRole="FG_GROUP" />
+        </EntityType>
+        <Association Name="FK_GROUP_APP">
+          <End Role="FG_APP" Type="CST.Security.Data.App" Multiplicity="1" />
+          <End Role="FG_GROUP" Type="CST.Security.Data.Group" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FG_APP">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="FG_GROUP">
+              <PropertyRef Name="AppID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FG_GROUP_USER">
+          <End Role="FG_GROUP" Type="CST.Security.Data.Group" Multiplicity="*" />
+          <End Role="FG_USER" Type="CST.Security.Data.User" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CSTSecurityDataStoreContainer" CdmEntityContainer="SecurityEntities">
+          <EntitySetMapping Name="Apps"><EntityTypeMapping TypeName="CST.Security.Data.App"><MappingFragment StoreEntitySet="FG_APP">
+            <ScalarProperty Name="ID" ColumnName="FG_APP_ID" />
+            <ScalarProperty Name="Code" ColumnName="FG_APP_CODE" />
+            <ScalarProperty Name="Name" ColumnName="FG_APP_NAME" />
+            <ScalarProperty Name="ActiveFlag" ColumnName="FG_ACTIVE_FLAG" />
+            <ScalarProperty Name="SysAdminFlag" ColumnName="FG_SYS_ADMIN_FLAG" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Groups"><EntityTypeMapping TypeName="CST.Security.Data.Group"><MappingFragment StoreEntitySet="FG_GROUP">
+            <ScalarProperty Name="ID" ColumnName="FG_GROUP_ID" />
+            <ScalarProperty Name="Code" ColumnName="FG_GROUP_CODE" />
+            <ScalarProperty Name="Name" ColumnName="FG_GROUP_NAME" />
+            <ScalarProperty Name="AppID" ColumnName="FG_APP_ID" />
+            <ScalarProperty Name="ActiveFlag" ColumnName="FG_ACTIVE_FLAG" />
+            <ScalarProperty Name="Description" ColumnName="FG_DESCRIPTION" />
+            <ScalarProperty Name="AppAdminFlag" ColumnName="FG_APP_ADMIN_FLAG" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Users"><EntityTypeMapping TypeName="CST.Security.Data.User"><MappingFragment StoreEntitySet="FG_USER">
+            <ScalarProperty Name="ID" ColumnName="FG_USER_ID" />
+            <ScalarProperty Name="Login" ColumnName="FG_USER_LOGIN" />
+            <ScalarProperty Name="LastName" ColumnName="FG_LAST_NAME" />
+            <ScalarProperty Name="FirstName" ColumnName="FG_FIRST_NAME" />
+            <ScalarProperty Name="Password" ColumnName="FG_PASSWORD" />
+            <ScalarProperty Name="EMail" ColumnName="FG_EMAIL" />
+            <ScalarProperty Name="Phone" ColumnName="FG_PHONE" />
+            <ScalarProperty Name="ActiveFlag" ColumnName="FG_ACTIVE_FLAG" />
+            <ScalarProperty Name="AlterPasswordFlag" ColumnName="FG_ALTER_PASSWORD_FLAG" />
+            <ScalarProperty Name="Culture" ColumnName="FG_CULTURE" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <AssociationSetMapping Name="FG_GROUP_USER" TypeName="CST.Security.Data.FG_GROUP_USER" StoreEntitySet="FG_GROUP_USER">
+            <EndProperty Name="FG_GROUP">
+              <ScalarProperty Name="ID" ColumnName="FG_GROUP_ID" />
+            </EndProperty>
+            <EndProperty Name="FG_USER">
+              <ScalarProperty Name="ID" ColumnName="FG_USER_ID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <FunctionImportMapping FunctionImportName="GetEncryptText" FunctionName="CST.Security.Data.Store.FG_GET_ENCRYPT_P" />
+          <FunctionImportMapping FunctionImportName="GetDecryptText" FunctionName="CST.Security.Data.Store.FG_GET_DECRYPT_P" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="SecurityModel">
+        <EntityTypeShape EntityType="CST.Security.Data.App" Width="1.5" PointX="4.5" PointY="1" Height="2.1725878906250005" IsExpanded="true" />
+        <EntityTypeShape EntityType="CST.Security.Data.Group" Width="1.5" PointX="2.5" PointY="1" Height="2.7494921874999996" IsExpanded="true" />
+        <EntityTypeShape EntityType="CST.Security.Data.User" Width="1.5" PointX="0.5" PointY="0.875" Height="3.1340950520833313" IsExpanded="true" />
+        <AssociationConnector Association="CST.Security.Data.FK_GROUP_APP" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="2.0862939453125002" />
+          <ConnectorPoint PointX="4" PointY="2.0862939453125002" />
+        </AssociationConnector>
+        <AssociationConnector Association="CST.Security.Data.FG_GROUP_USER" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.5" PointY="2.37474609375" />
+          <ConnectorPoint PointX="2" PointY="2.37474609375" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
